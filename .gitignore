@@ -1,0 +1,10 @@
+node_modules/
+.env
+*.log
+.squad/pr-summary.md
+.squad/log/
+.squad/orchestration-log/
+.squad/sessions/
+.squad/.scratch/
+.squad/.cache/
+.squad/decisions/inbox/

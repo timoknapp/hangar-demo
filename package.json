@@ -1,0 +1,16 @@
+{
+  "name": "hangar-demo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A small, public learning fixture for the Hangar software factory",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test",
+    "build": "node --check server.js"
+  }
+}
