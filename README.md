@@ -16,6 +16,7 @@ npm start
 ```
 
 Open `http://127.0.0.1:3000` for the task list; `GET /api/tasks` returns the same synthetic data as JSON.
+`GET /health` returns HTTP 200 with JSON `{"status":"ok"}` and `Cache-Control: no-store`.
 The app binds to loopback by default and stores nothing between runs.
 
 ## What this demonstrates
