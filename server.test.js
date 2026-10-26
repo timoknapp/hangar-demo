@@ -54,3 +54,32 @@ test('unsupported query is rejected', async t => {
   const res = await request(t, '/api/tasks?unknown=1');
   assert.equal(res.status, 404);
 });
+
+test('GET /health returns exactly the health JSON without caching', async t => {
+  const res = await request(t, '/health');
+  assert.equal(res.status, 200);
+  assert.equal(res.headers.get('content-type'), 'application/json; charset=utf-8');
+  assert.equal(res.headers.get('cache-control'), 'no-store');
+  assert.equal(await res.text(), '{"status":"ok"}');
+});
+
+test('health route does not broaden accepted paths or queries', async t => {
+  for (const path of ['/health/', '/health/extra', '/health?unknown=1', '/?unknown=1', '/missing']) {
+    const res = await request(t, path);
+    assert.equal(res.status, 404, path);
+    assert.deepEqual(await res.json(), { error: 'Not found' }, path);
+  }
+});
+
+test('non-GET methods retain 405 behavior on existing, health and unknown paths', async t => {
+  for (const path of ['/', '/api/tasks', '/health', '/missing']) {
+    for (const method of ['POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD']) {
+      const label = `${method} ${path}`;
+      const res = await request(t, path, { method });
+      assert.equal(res.status, 405, label);
+      assert.equal(res.headers.get('allow'), 'GET', label);
+      assert.equal(res.headers.get('cache-control'), 'no-store', label);
+      assert.equal(await res.text(), method === 'HEAD' ? '' : '{"error":"Method not allowed"}', label);
+    }
+  }
+});

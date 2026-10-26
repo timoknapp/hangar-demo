@@ -15,6 +15,10 @@ export function createApp() {
       res.writeHead(405, { Allow: 'GET', 'Content-Type': 'application/json' });
       return res.end(JSON.stringify({ error: 'Method not allowed' }));
     }
+    if (url.pathname === '/health' && url.search === '') {
+      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+      return res.end(JSON.stringify({ status: 'ok' }));
+    }
     if (url.pathname === '/api/tasks' && url.search === '') {
       res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
       return res.end(JSON.stringify(tasks));
